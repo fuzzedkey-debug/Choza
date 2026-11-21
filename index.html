@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Суперсила команды</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(160deg, #0f1020 0%, #1a1c3a 60%, #2a1f4a 100%);
+    color: #fff;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  /* ---------- Шапка: эмблема и девиз ---------- */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .emblem {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #6ee7ff, #3b5bdb 60%, #1e1b4b);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    box-shadow: 0 0 25px rgba(110, 231, 255, 0.6);
+    flex-shrink: 0;
+  }
+
+  .motto {
+    font-size: 22px;
+    font-style: italic;
+    letter-spacing: 1px;
+    color: #a5b4fc;
+    text-shadow: 0 0 12px rgba(165, 180, 252, 0.4);
+    text-align: center;
+  }
+
+  .motto span { color: #6ee7ff; font-weight: 700; }
+
+  /* ---------- Заголовок "Суперсила команды" ---------- */
+  .team-title {
+    text-align: center;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin: 30px 0 35px;
+    background: linear-gradient(90deg, #6ee7ff, #a78bfa, #f472b6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+  }
+
+  /* ---------- 4 мини-окошка с фото ---------- */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto 50px;
+  }
+
+  .member {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+    cursor: pointer;
+    border: 2px solid rgba(110, 231, 255, 0.25);
+    transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    background: #1e1b4b;
+  }
+
+  .member img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.45s ease, filter 0.35s ease;
+  }
+
+  /* слой с информацией */
+  .member-info {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10, 10, 30, 0.95) 0%, rgba(10, 10, 30, 0.7) 55%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 18px;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+
+  .member-info h3 {
+    font-size: 20px;
+    color: #6ee7ff;
+    margin-bottom: 6px;
+  }
+
+  .member-info .role {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: rgba(167, 139, 250, 0.25);
+    color: #c4b5fd;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    align-self: flex-start;
+  }
+
+  .member-info .credo {
+    font-size: 13px;
+    line-height: 1.45;
+    color: #e0e7ff;
+    font-style: italic;
+  }
+
+  /* эффект при наведении мыши */
+  .member:hover {
+    transform: translateY(-6px);
+    border-color: #6ee7ff;
+    box-shadow: 0 0 30px rgba(110, 231, 255, 0.45);
+    z-index: 2;
+  }
+
+  .member:hover img { transform: scale(1.06); filter: brightness(0.75); }
+  .member:hover .member-info { opacity: 1; transform: translateY(0); }
+
+  /* ---------- Большое окно с видео ---------- */
+  .video-section {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .video-frame {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 2px solid rgba(167, 139, 250, 0.4);
+    box-shadow: 0 0 40px rgba(110, 231, 255, 0.15);
+    background: #000;
+  }
+
+  .video-frame video {
+    width: 100%;
+    display: block;
+    max-height: 520px;
+    object-fit: cover;
+  }
+
+  .video-label {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: rgba(10, 10, 30, 0.75);
+    border: 1px solid rgba(110, 231, 255, 0.5);
+    color: #6ee7ff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
+  }
+
+  .btn-skin {
+    margin-top: 24px;
+    padding: 14px 38px;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #0f1020;
+    background: linear-gradient(90deg, #6ee7ff, #a78bfa);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    box-shadow: 0 0 20px rgba(110, 231, 255, 0.35);
+  }
+
+  .btn-skin:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 35px rgba(167, 139, 250, 0.7);
+    filter: brightness(1.1);
+  }
+
+  .btn-skin:active { transform: translateY(1px); }
+
+  /* ---------- Адаптив для телефонов ---------- */
+  @media (max-width: 820px) {
+    .team-grid { grid-template-columns: repeat(2, 1fr); }
+    .team-title { font-size: 24px; }
+    .motto { font-size: 17px; }
+    .emblem { width: 70px; height: 70px; font-size: 30px; }
+  }
+
+  @media (max-width: 480px) {
+    .team-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Шапка: эмблема и девиз -->
+  <header>
+    <div class="emblem">🌀</div>
+    <div class="motto">Девиз команды: <span>«Вместе — сила, порознь — искра»</span></div>
+  </header>
+
+  <!-- Заголовок -->
+  <h1 class="team-title">Суперсила команды</h1>
+
+  <!-- 4 мини-окошка с фото участников -->
+  <div class="team-grid">
+
+    <!-- Участник 1 -->
+    <div class="member">
+      <img src="images/photo1.jpg" alt="Участник 1">
+      <div class="member-info">
+        <span class="role">Капитан</span>
+        <h3>Имя Фамилия</h3>
+        <p class="credo">«Кредо: не сдаваться, пока не попробуешь ещё раз»</p>
+      </div>
+    </div>
+
+    <!-- Участник 2 -->
+    <div class="member">
+      <img src="images/photo2.jpg" alt="Участник 2">
+      <div class="member-info">
+        <span class="role">Стратег</span>
+        <h3>Имя Фамилия</h3>
+        <p class="credo">«Кредо: сначала план, потом действие»</p>
+      </div>
+    </div>
+
+    <!-- Участник 3 -->
+    <div class="member">
+      <img src="images/photo3.jpg" alt="Участник 3">
+      <div class="member-info">
+        <span class="role">Инженер</span>
+        <h3>Имя Фамилия</h3>
+        <p class="credo">«Кредо: если сломалось — починим, если нет — улучшим»</p>
+      </div>
+    </div>
+
+    <!-- Участник 4 -->
+    <div class="member">
+      <img src="images/photo4.jpg" alt="Участник 4">
+      <div class="member-info">
+        <span class="role">Дизайнер</span>
+        <h3>Имя Фамилия</h3>
+        <p class="credo">«Кредо: красота — это тоже функция»</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Большое окно с видео + кнопка смены -->
+  <section class="video-section">
+    <div class="video-frame">
+      <video id="mainVideo" src="video/video1.mp4" controls playsinline></video>
+      <span class="video-label" id="videoLabel">Скин 1</span>
+    </div>
+    <button class="btn-skin" onclick="changeSkin()">Поменять скин</button>
+  </section>
+
+<script>
+  // Список «скинов» — видеофайлов. Добавьте свои пути.
+  const skins = [
+    { src: "video/video1.mp4", label: "Скин 1" },
+    { src: "video/video2.mp4", label: "Скин 2" },
+    { src: "video/video3.mp4", label: "Скин 3" }
+  ];
+
+  let currentSkin = 0;
+  const videoEl  = document.getElementById("mainVideo");
+  const labelEl  = document.getElementById("videoLabel");
+
+  function changeSkin() {
+    currentSkin = (currentSkin + 1) % skins.length;
+    videoEl.src = skins[currentSkin].src;
+    labelEl.textContent = skins[currentSkin].label;
+    videoEl.load();
+    videoEl.play().catch(() => {}); // автозапуск может быть заблокирован браузером — не страшно
+  }
+</script>
+
+</body>
+</html>
